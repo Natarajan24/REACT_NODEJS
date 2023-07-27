@@ -22,8 +22,8 @@ const User = (props) => {
     };
     props.addUser(array);
   };
+
   const colume = ["s.no", "name", "email"];
-  console.log("aaas", props?.getUserData?.data);
 
   const renderColumns = () => {
     return colume.map((columnName, index) => (

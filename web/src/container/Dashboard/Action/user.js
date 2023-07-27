@@ -34,7 +34,6 @@ export const addUser = (data) => {
 
 export const getUser = () => {
   return async (dispatch) => {
-    console.log("1234");
     return await ajax
       .get(API_USER, {})
       .then((response) => {

@@ -6,7 +6,6 @@ const initalState = {
 };
 
 const UserReducer = (state = initalState, action) => {
-  console.log(action.type, "222222222");
   switch (action.type) {
     case USER_GET:
       return {
