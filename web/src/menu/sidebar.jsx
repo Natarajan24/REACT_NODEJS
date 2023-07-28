@@ -3,19 +3,19 @@ import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar = () => {
-  console.log("props");
+  // className="sidebar"
   return (
-    <div className="sidebar">
-      <ul>
-        <li>
+    <div style={{ display: "flex" }}>
+      <ul style={{ display: "flex", listStyle: "none", padding: 0 }}>
+        <li style={{ margin: "0 10px" }}>
           <Link to="/User">User</Link>
         </li>
-        <li>
+        <li style={{ margin: "0 10px" }}>
           <Link to="/User_details">UserDetails</Link>
         </li>
-        <li>
+        {/* <li style={{ margin: "0 10px" }}>
           <Link to="/Log_out">LogOut</Link>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

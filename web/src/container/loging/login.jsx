@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import App from "../../App";
 
 const Login = () => {
   const [inputValue, setInputValue] = useState();
@@ -16,21 +17,31 @@ const Login = () => {
       inputValue?.email === "natarajnatarajc99@gmail.com"
     ) {
       localStorage.setItem("auth", true);
+      <App status={true} />;
       navigate("/User");
     } else {
+      <App status={false} />;
       alert("error");
     }
   };
 
   return (
     <>
-      <lable>Name:</lable>
-      <input type="name" name="name" onChange={(e) => handleChange(e)} />
-      <br />
-      <lable>Email:</lable>
-      <input type="email" name="email" onChange={(e) => handleChange(e)} />
-      <br />
-      <button onClick={handleSubmitt}>Submitt</button>
+      <div>
+        <form>
+          <lable>Name:</lable>
+          <input type="name" name="name" onChange={(e) => handleChange(e)} />
+          <br />
+          <br />
+          <lable>Email:</lable>
+          <input type="email" name="email" onChange={(e) => handleChange(e)} />
+          <br />
+          <br />
+          <button onClick={handleSubmitt} style={{ marginLeft: "70px" }}>
+            Submitt
+          </button>
+        </form>
+      </div>
     </>
   );
 };
