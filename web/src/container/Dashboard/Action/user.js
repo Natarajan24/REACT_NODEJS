@@ -1,6 +1,6 @@
 import ajax from "../../../util/http/ajax";
 import { API_USER } from "../../../util/http/apipath";
-import { USER_ADD, USER_GET } from "../constant";
+import { USER_ADD, USER_GET, USER_DELETE, USER_EDIT } from "../constant";
 
 export const addUser = (data) => {
   return async (dispatch) => {
@@ -59,15 +59,14 @@ export const getUser = () => {
       });
   };
 };
-
-export const editUser = () => {
+export const deleteUser = (data) => {
   return async (dispatch) => {
     return await ajax
-      .put(API_USER)
+      .delete(API_USER, data)
       .then((response) => {
         if (response && response === 200) {
           return dispatch({
-            type: "USER_EDIT",
+            type: USER_DELETE,
             data: response,
           });
         }
@@ -80,7 +79,7 @@ export const editUser = () => {
             data: error.response,
           };
           return dispatch({
-            type: "USER_EDIT",
+            type: USER_DELETE,
             data: response,
           });
         }

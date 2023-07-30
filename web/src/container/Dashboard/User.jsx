@@ -1,29 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Table, Button, Form } from "react-bootstrap";
-import { addUser, getUser } from "../Dashboard/Action/user";
+import { addUser, getUser, deleteUser } from "../Dashboard/Action/user";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import './User.css'
 
 const User = (props) => {
   const array = {
     name: "",
     email: "",
+    contact: "",
+    address: ""
   };
+  const navigate = useNavigate();
+
+
   const [inputValue, setInputValue] = useState(array);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 5;
-
-  const totalPages = Math.ceil(props?.getUserData?.data / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = props?.getUserData?.data.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
 
   useEffect(() => {
     props.getUser();
   }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("auth")) {
+      navigate("/");
+    }
+  }, [])
+
+
+
+  const handleLogOut = () => {
+    localStorage.removeItem("auth");
+    if (localStorage.getItem("auth") !== true) {
+      navigate("/");
+    }
+  };
 
   const handleChange = (e) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
@@ -33,23 +45,24 @@ const User = (props) => {
     let array = {
       name: inputValue.name,
       email: inputValue.email,
+      contact: inputValue.contact,
+      address: inputValue.address,
       status: true,
     };
     props.addUser(array).then((res) => {
-      setInputValue({ ...inputValue, name: "", email: "" });
+      setInputValue({ ...inputValue, name: "", email: "", contact: "", address: "" });
       props.getUser();
     });
   };
 
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
-  };
 
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
+  // const handleDelete = (id) => {
+  //   props.deleteUser(id).then((res) => {
+  //     props.getUser();
+  //   })
+  // }
 
-  const colume = ["s.no", "name", "email"];
+  const colume = ["S.No", "Name", "Email", "Contact", "Address", "Action"];
 
   const renderColumns = () => {
     return colume.map((columnName, index) => (
@@ -66,69 +79,102 @@ const User = (props) => {
     ));
   };
 
+
   const renderTable = () => {
     return (
-      <Table striped hover responsive id="data-table-zero3">
-        <thead className="thead-light">
-          <tr>{renderColumns()}</tr>
-        </thead>
-        <tbody>
-          {" "}
-          {currentData?.map((item, index) => {
-            return (
-              <tr key={index + 1}>
-                <td className="align-middle">{index + 1}</td>
-                <td className="align-middle">{item.name ? item.name : "--"}</td>
-                <td className="align-middle">
-                  {item.email ? item.email : "--"}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      <div className="table-container">
+        <table className="table">
+          <thead className="thead-light">
+            <tr>{renderColumns()}</tr>
+          </thead>
+          <tbody>
+            {props?.getUserData?.data?.map((item, index) => {
+              return (
+                <tr key={index + 1}>
+                  <td className="align-middle">{index + 1}</td>
+                  <td className="align-middle">{item.name ? item.name : "--"}</td>
+                  <td className="align-middle">
+                    {item.email ? item.email : "--"}
+                  </td>
+                  <td className="align-middle">
+                    {item.email ? item.contact : "--"}
+                  </td>
+                  <td className="align-middle">
+                    {item.email ? item.address : "--"}
+                  </td>
+                  <td className="align-middle">
+                  </td>
+                </tr>
+              );
+            })}
+
+          </tbody>
+        </table>
+
+      </div>
     );
   };
 
   return (
     <>
-      <div style={{ alignItems: "center" }}>
-        <h1>User</h1>
-        <label>NAME:</label>
-        <input
-          type="text"
-          name="name"
-          value={inputValue.name}
-          onChange={(e) => handleChange(e)}
-        />
-        <br />
-        <br />
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={inputValue.email}
-          onChange={(e) => handleChange(e)}
-        />
-        <br />
-        <br />
-        <button onClick={handleSubmitt}>Submitt</button>
-        <br />
-        <br />
-        <br />
-        {renderTable()}
+      <Card>
         <div>
-          <button onClick={handlePrevPage} disabled={currentPage === 1}>
-            Previous
-          </button>
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <button onClick={handleLogOut}>LOGOUT</button>
         </div>
-      </div>
+        <div style={{ border: "2px solid black", width: "300px", marginLeft: '600px', marginTop: '100px' }}>
+          <h1 style={{ textAlign: "center " }}>User</h1>
+          <div style={{ padding: '50px', marginTop: '-50px' }}>
+            <label>NAME</label><br />
+            <input
+              style={{ border: 'none', borderBottom: '1px solid black' }}
+              type="text"
+              name="name"
+              value={inputValue.name}
+              onChange={(e) => handleChange(e)}
+            />
+            <br />
+            <br />
+            <label>Email</label><br />
+            <input
+              style={{ border: 'none', borderBottom: '1px solid black' }}
+              type="email"
+              name="email"
+              value={inputValue.email}
+              onChange={(e) => handleChange(e)}
+            />
+            <br />
+            <br />
+            <label>Contact</label><br />
+            <input
+              style={{ border: 'none', borderBottom: '1px solid black' }}
+              type="number"
+              name="contact"
+              value={inputValue.contact}
+              onChange={(e) => handleChange(e)}
+            />
+            <br />
+            <br />
+            <label>Address</label><br />
+            <input
+              style={{ border: 'none', borderBottom: '1px solid black' }}
+              type="text"
+              name="address"
+              value={inputValue.address}
+              onChange={(e) => handleChange(e)}
+            />
+            <br />
+            <br />
+            <button style={{ marginLeft: '46px' }} onClick={handleSubmitt}>Submitt</button>
+          </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div style={{ marginTop: '-200px' }}>
+          {renderTable()}
+        </div>
+      </Card>
+
     </>
   );
 };
@@ -140,72 +186,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   addUser: addUser,
   getUser: getUser,
+  deleteUser: deleteUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
 
-// import React, { useState } from 'react';
 
-// const tableData = [
-//   // Your data array goes here
-//   // Sample data:
-//   { id: 1, name: 'John', age: 25, email: 'john@example.com' },
-//   { id: 2, name: 'Jane', age: 30, email: 'jane@example.com' },
-//   { id: 3, name: 'Bob', age: 28, email: 'bob@example.com' },
-//   // Add more data as needed
-// ];
 
-// const itemsPerPage = 10; // Number of items to display per page
 
-// function User() {
-//   const [currentPage, setCurrentPage] = useState(1);
-
-//   const totalPages = Math.ceil(tableData.length / itemsPerPage);
-//   const indexOfLastItem = currentPage * itemsPerPage;
-//   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-//   const currentData = tableData.slice(indexOfFirstItem, indexOfLastItem);
-
-//   const handlePrevPage = () => {
-//     setCurrentPage((prevPage) => prevPage - 1);
-//   };
-
-//   const handleNextPage = () => {
-//     setCurrentPage((prevPage) => prevPage + 1);
-//   };
-
-//   return (
-//     <div>
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>ID</th>
-//             <th>Name</th>
-//             <th>Age</th>
-//             <th>Email</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {currentData.map((item) => (
-//             <tr key={item.id}>
-//               <td>{item.id}</td>
-//               <td>{item.name}</td>
-//               <td>{item.age}</td>
-//               <td>{item.email}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
-//       <div>
-//         <button onClick={handlePrevPage} disabled={currentPage === 1}>
-//           Previous
-//         </button>
-//         <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-//           Next
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default User;
