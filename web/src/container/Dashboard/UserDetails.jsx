@@ -21,7 +21,6 @@ const UserDetails = () => {
   };
 
   const handlesubmit = () => {
-
     const values = [
       "Apple",
       "Banana",
@@ -39,22 +38,30 @@ const UserDetails = () => {
   };
   return (
     <>
-      <h1>UserDetails</h1>
-      <div>
-        <lable>Description</lable>
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="description"
-          name="description"
-          value={inputValue.description}
-          onChange={(e) => handleChange(e)}
-        />
-        <br />
-        <h2>Current Count: {count.current}</h2> <br />
-        <button onClick={handleReset}>Reset Count</button>
-        <br />
-        <button onClick={handlesubmit}>Submitt</button>
+      <div
+        style={{
+          width: "300px",
+          marginLeft: "450px",
+          marginTop: "-500px",
+        }}
+      >
+        <h1>UserDetails</h1>
+        <div>
+          <lable>Description</lable>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="description"
+            name="description"
+            value={inputValue.description}
+            onChange={(e) => handleChange(e)}
+          />
+          <br />
+          <h2>Current Count: {count.current}</h2> <br />
+          <button onClick={handleReset}>Reset Count</button>
+          <br />
+          <button onClick={handlesubmit}>Submitt</button>
+        </div>
       </div>
     </>
   );

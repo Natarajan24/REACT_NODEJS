@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, Table, Button, Form } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { addUser, getUser, deleteUser } from "../Dashboard/Action/user";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import './User.css'
+import "./User.css";
 
 const User = (props) => {
   const array = {
     name: "",
     email: "",
     contact: "",
-    address: ""
+    address: "",
   };
   const navigate = useNavigate();
 
-
   const [inputValue, setInputValue] = useState(array);
-
 
   useEffect(() => {
     props.getUser();
@@ -26,16 +24,7 @@ const User = (props) => {
     if (!localStorage.getItem("auth")) {
       navigate("/");
     }
-  }, [])
-
-
-
-  const handleLogOut = () => {
-    localStorage.removeItem("auth");
-    if (localStorage.getItem("auth") !== true) {
-      navigate("/");
-    }
-  };
+  }, []);
 
   const handleChange = (e) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
@@ -50,17 +39,16 @@ const User = (props) => {
       status: true,
     };
     props.addUser(array).then((res) => {
-      setInputValue({ ...inputValue, name: "", email: "", contact: "", address: "" });
+      setInputValue({
+        ...inputValue,
+        name: "",
+        email: "",
+        contact: "",
+        address: "",
+      });
       props.getUser();
     });
   };
-
-
-  // const handleDelete = (id) => {
-  //   props.deleteUser(id).then((res) => {
-  //     props.getUser();
-  //   })
-  // }
 
   const colume = ["S.No", "Name", "Email", "Contact", "Address", "Action"];
 
@@ -79,7 +67,6 @@ const User = (props) => {
     ));
   };
 
-
   const renderTable = () => {
     return (
       <div className="table-container">
@@ -92,7 +79,9 @@ const User = (props) => {
               return (
                 <tr key={index + 1}>
                   <td className="align-middle">{index + 1}</td>
-                  <td className="align-middle">{item.name ? item.name : "--"}</td>
+                  <td className="align-middle">
+                    {item.name ? item.name : "--"}
+                  </td>
                   <td className="align-middle">
                     {item.email ? item.email : "--"}
                   </td>
@@ -102,15 +91,12 @@ const User = (props) => {
                   <td className="align-middle">
                     {item.email ? item.address : "--"}
                   </td>
-                  <td className="align-middle">
-                  </td>
+                  <td className="align-middle"></td>
                 </tr>
               );
             })}
-
           </tbody>
         </table>
-
       </div>
     );
   };
@@ -118,15 +104,20 @@ const User = (props) => {
   return (
     <>
       <Card>
-        <div>
-          <button onClick={handleLogOut}>LOGOUT</button>
-        </div>
-        <div style={{ border: "2px solid black", width: "300px", marginLeft: '600px', marginTop: '100px' }}>
+        <div
+          style={{
+            border: "2px solid black",
+            width: "300px",
+            marginLeft: "550px",
+            marginTop: "-500px",
+          }}
+        >
           <h1 style={{ textAlign: "center " }}>User</h1>
-          <div style={{ padding: '50px', marginTop: '-50px' }}>
-            <label>NAME</label><br />
+          <div style={{ padding: "50px", marginTop: "-50px" }}>
+            <label>NAME</label>
+            <br />
             <input
-              style={{ border: 'none', borderBottom: '1px solid black' }}
+              style={{ border: "none", borderBottom: "1px solid black" }}
               type="text"
               name="name"
               value={inputValue.name}
@@ -134,9 +125,10 @@ const User = (props) => {
             />
             <br />
             <br />
-            <label>Email</label><br />
+            <label>Email</label>
+            <br />
             <input
-              style={{ border: 'none', borderBottom: '1px solid black' }}
+              style={{ border: "none", borderBottom: "1px solid black" }}
               type="email"
               name="email"
               value={inputValue.email}
@@ -144,9 +136,10 @@ const User = (props) => {
             />
             <br />
             <br />
-            <label>Contact</label><br />
+            <label>Contact</label>
+            <br />
             <input
-              style={{ border: 'none', borderBottom: '1px solid black' }}
+              style={{ border: "none", borderBottom: "1px solid black" }}
               type="number"
               name="contact"
               value={inputValue.contact}
@@ -154,9 +147,10 @@ const User = (props) => {
             />
             <br />
             <br />
-            <label>Address</label><br />
+            <label>Address</label>
+            <br />
             <input
-              style={{ border: 'none', borderBottom: '1px solid black' }}
+              style={{ border: "none", borderBottom: "1px solid black" }}
               type="text"
               name="address"
               value={inputValue.address}
@@ -164,17 +158,16 @@ const User = (props) => {
             />
             <br />
             <br />
-            <button style={{ marginLeft: '46px' }} onClick={handleSubmitt}>Submitt</button>
+            <button style={{ marginLeft: "46px" }} onClick={handleSubmitt}>
+              Submitt
+            </button>
           </div>
         </div>
         <br />
-        <br />
-        <br />
-        <div style={{ marginTop: '-200px' }}>
+        <div style={{ marginTop: "-230px", marginLeft: "200px" }}>
           {renderTable()}
         </div>
       </Card>
-
     </>
   );
 };
@@ -186,11 +179,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   addUser: addUser,
   getUser: getUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
-
-
-
-
